@@ -31,23 +31,39 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Initialize dark mode from localStorage
   function initializeDarkMode() {
-    const isDarkMode = localStorage.getItem("darkMode") === "true";
-    if (isDarkMode) {
-      document.body.classList.add("dark-mode");
-      darkModeIcon.textContent = "☀️";
+    if (!darkModeIcon) return;
+    
+    try {
+      const isDarkMode = localStorage.getItem("darkMode") === "true";
+      if (isDarkMode) {
+        document.body.classList.add("dark-mode");
+        darkModeIcon.textContent = "☀️";
+      }
+    } catch (error) {
+      console.warn("localStorage not available:", error);
     }
   }
 
   // Toggle dark mode
   function toggleDarkMode() {
+    if (!darkModeIcon) return;
+    
     document.body.classList.toggle("dark-mode");
     const isDarkMode = document.body.classList.contains("dark-mode");
-    localStorage.setItem("darkMode", isDarkMode);
+    
+    try {
+      localStorage.setItem("darkMode", isDarkMode);
+    } catch (error) {
+      console.warn("localStorage not available:", error);
+    }
+    
     darkModeIcon.textContent = isDarkMode ? "☀️" : "🌙";
   }
 
   // Dark mode toggle event listener
-  darkModeToggle.addEventListener("click", toggleDarkMode);
+  if (darkModeToggle) {
+    darkModeToggle.addEventListener("click", toggleDarkMode);
+  }
 
   // Activity categories with corresponding colors
   const activityTypes = {
